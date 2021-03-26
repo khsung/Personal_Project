@@ -1,13 +1,17 @@
 from tkinter import *
 from tkinter import ttk
-import tkinter as tk
+from tkinter import messagebox
+import threading
+import time
 
 def minesweeper(level):
-    minesweeper=tk.Tk()
+    global thread
+    minesweeper=Tk()
     minesweeper.title("게임 시작!!")
     def reset():
-        minesweeper.quit()      #리셋부분 오류
-        minesweeper(level)
+
+        minesweeper.destroy()      #리셋부분 오류
+        return minesweeper(level)
     if level==1:
         minesweeper.geometry("250x250")
     elif level==2:
@@ -16,35 +20,47 @@ def minesweeper(level):
         minesweeper.geometry("600x600")
 
     resetbutton=Button(minesweeper,text="Reset",command=reset).pack()
+    second=0
+    def starttimer():
+        second=0
+        while True:
+            timer=Label(minesweeper,text=second,width=10,height=5,foreground="red",font=20)
+            timer.pack()
+            second+=1
+            time.sleep(1)
+            timer.destroy()
+    thread=threading.Thread(target=starttimer).start()
 
     minesweeper.mainloop()
 
-
-def start_minesweeper():   
-    start_window=tk.Tk()
-    start_window.geometry("300x200")
-    start_window.title("시작 화면")
-    #start_window.resizable(False,False)
-    def select_mode():
-        global start_window         #부모창 global 선언
-        if level.get()==1 or level.get()==2 or level.get()==3 :
-            start_window.quit()
-            minesweeper(level.get())
-            #start_window.quit()     #부모창 종료안됨
-        else:
-            print("없음")    
-
-    level=IntVar()
-    lever1=ttk.Radiobutton(start_window,text="초급",variable=level,value=1)
-    lever1.pack(side="top",pady=10)
-    lever2=ttk.Radiobutton(start_window,text="중급",variable=level,value=2)
-    lever2.pack(side="top",pady=10)
-    lever3=ttk.Radiobutton(start_window,text="고급",variable=level,value=3)
-    lever3.pack(side="top",pady=10)
+class Start:
+    def __init__(self,parent):   
+        self.parent=parent
+        parent.geometry("300x200")
+        parent.title("시작 화면")
+        parent.resizable(False,False)  
+        self.level=IntVar()
+        self.lever1=ttk.Radiobutton(parent,text="초급",variable=self.level,value=1)
+        self.lever1.pack(side="top",pady=10)
+        self.lever2=ttk.Radiobutton(parent,text="중급",variable=self.level,value=2)
+        self.lever2.pack(side="top",pady=10)
+        self.lever3=ttk.Radiobutton(parent,text="고급",variable=self.level,value=3)
+        self.lever3.pack(side="top",pady=10)
     
-    action=ttk.Button(start_window,text="게임시작!!",command=select_mode)
-    action.pack(side="top",pady=10)
-    start_window.mainloop()
+        self.action=ttk.Button(parent,text="게임시작!!",command=self.select_mode)
+        self.action.pack(side="top",pady=10)
 
+    def select_mode(self):
+        if self.level.get()==1 or self.level.get()==2 or self.level.get()==3 :
+            self.parent.destroy()
+            minesweeper(self.level.get())
+        else:
+            messagebox.showinfo(title="오류",message="난이도를 선택하세요") 
 
-start_minesweeper()
+def main():
+    root=Tk()
+    start=Start(root)
+    root.mainloop()
+
+if __name__=="__main__":
+    main()
