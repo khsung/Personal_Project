@@ -9,9 +9,10 @@ def minesweeper(level):
     minesweeper=Tk()
     minesweeper.title("게임 시작!!")
     def reset():
-
+        
         minesweeper.destroy()      #리셋부분 오류
-        return minesweeper(level)
+        main()
+        #return minesweeper(level)
     if level==1:
         minesweeper.geometry("250x250")
     elif level==2:
@@ -19,7 +20,10 @@ def minesweeper(level):
     else:
         minesweeper.geometry("600x600")
 
-    resetbutton=Button(minesweeper,text="Reset",command=reset).pack()
+    resetbutton=ttk.Button(minesweeper,text="Reset",command=reset)
+    resetbutton.pack()
+    print(type(resetbutton))
+    #resetbutton.bind("<Enter>",lambda x:resetbutton.config(bg='black'))
     second=0
     def starttimer():
         second=0
@@ -49,7 +53,6 @@ class Start:
     
         self.action=ttk.Button(parent,text="게임시작!!",command=self.select_mode)
         self.action.pack(side="top",pady=10)
-
     def select_mode(self):
         if self.level.get()==1 or self.level.get()==2 or self.level.get()==3 :
             self.parent.destroy()
