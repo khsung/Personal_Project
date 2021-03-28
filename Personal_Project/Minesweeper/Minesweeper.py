@@ -4,6 +4,7 @@ from tkinter import messagebox
 import tkinter as tk
 import threading
 import time
+import random
 
 #게임 화면
 def minesweeper(level):
@@ -14,45 +15,73 @@ def minesweeper(level):
         minesweeper_window.destroy()
         return minesweeper(level)
     if level==1:
-        minesweeper_window.geometry("250x250")
+        minesweeper_window.geometry("280x350")
+        mine_num=10
+        size_x=9
+        size_y=9
     elif level==2:
-        minesweeper_window.geometry("400x400")
+        minesweeper_window.geometry("450x550")
+        mine_num=40
+        size_x=16
+        size_y=16
     else:
-        minesweeper_window.geometry("600x600")
+        minesweeper_window.geometry("900x600")
+        mine_num=99
+        size_x=30
+        size_y=16
 
+    #새 게임 시작하기(난이도 선택 화면으로)
     def newgame():
         minesweeper_window.destroy()
         main()
 
-    restartbutton=ttk.Button(minesweeper_window,text="다시하기",command=restart)
-    restartbutton.pack()
-    newgamebutton=ttk.Button(minesweeper_window,text="새 게임",command=newgame)
-    newgamebutton.pack()
+    top_menu=tk.Frame(minesweeper_window)
+    top_menu.pack()
+    game=tk.Frame(minesweeper_window)
+    game.pack()
+
+    restartbutton=ttk.Button(top_menu,text="다시하기",command=restart)
+    restartbutton.pack(side="left")
+    newgamebutton=ttk.Button(top_menu,text="새 게임",command=newgame)
+    newgamebutton.pack(side="right")
     
+    #지뢰 랜덤생성
+    mines=[]
+    while len(mines)<mine_num:
+        temp=[random.randrange(0,size_y),random.randrange(0,size_x)]
+        if temp not in mines:
+            mines.append(temp)
+
+
     
     
 
     #지뢰 평상시 : raised, Hover 시 : groove, 선택완료시 : ridge(선택불가능 추가)
 
-    btn=[]
-    def printnum(num):
-        print(num)
+    btn=[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove") for i in range(size_y*size_x)]
+    btn_index=0
+    for i in range(size_y):
+        for j in range(size_x):
+            btn[btn_index].grid(row=i,column=j)
+            btn_index+=1
+    #def printnum(num):
+    #    print(num)
 
-    btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="flat"))
-    btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="groove",overrelief="flat"))
+    #btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="flat"))
+    #btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="groove",overrelief="flat"))
 
-    btn.append(tk.Button(minesweeper_window,text="",width=20,height=20,bd=3,relief="raised",overrelief="groove",bitmap="gray50"))
+    #btn.append(tk.Button(minesweeper_window,text="",width=20,height=20,bd=3,relief="raised",overrelief="groove"))
 
-    btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="ridge"))
+    #btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="ridge"))
     
-    btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="solid"))
+    #btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="solid"))
 
-    btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="sunken"))
+    #btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="sunken"))
 
 
-    for i in range(len(btn)):
-        #btn[i].bind("<ButtonRelease-1>",)
-        btn[i].pack()
+    #for i in range(len(btn)):
+    #    #btn[i].bind("<ButtonRelease-1>",)
+    #    btn[i].pack()
 
 
     
@@ -62,7 +91,7 @@ def minesweeper(level):
     def starttimer():
         second=0
         while True:
-            timer=tk.Label(minesweeper_window,text=second,width=10,height=5,foreground="red",font=20)
+            timer=tk.Label(top_menu,text=second,width=10,height=5,foreground="red",font=20)
             timer.pack()
             second+=1
             time.sleep(1)
