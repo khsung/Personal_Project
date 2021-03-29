@@ -1,6 +1,7 @@
 #from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
+
 import tkinter as tk
 import threading
 import time
@@ -15,20 +16,23 @@ def minesweeper(level):
         minesweeper_window.destroy()
         return minesweeper(level)
     if level==1:
-        minesweeper_window.geometry("280x350")
+        minesweeper_window.geometry("300x370")
         mine_num=10
         size_x=9
         size_y=9
     elif level==2:
-        minesweeper_window.geometry("450x550")
+        minesweeper_window.geometry("490x570")
         mine_num=40
         size_x=16
         size_y=16
     else:
-        minesweeper_window.geometry("900x600")
+        minesweeper_window.geometry("900x590")
         mine_num=99
         size_x=30
         size_y=16
+
+
+
 
     #새 게임 시작하기(난이도 선택 화면으로)
     def newgame():
@@ -45,6 +49,25 @@ def minesweeper(level):
     newgamebutton=ttk.Button(top_menu,text="새 게임",command=newgame)
     newgamebutton.pack(side="right")
     
+
+    second=0
+    timer=tk.Label(top_menu,text=second,width=10,height=5,foreground="red",font=20)
+    timer.pack()
+    def starttimer():
+        second=0
+        while True:
+            timer=tk.Label(top_menu,text=second,width=10,height=5,foreground="red",font=20)
+            timer.pack()
+            second+=1
+            time.sleep(1)
+            timer.destroy()
+    #thread=threading.Thread(target=starttimer)
+    #thread.start()
+
+
+    ##쓰레드 시작을 위한 첫 클릭 변수
+    #click_num=0            변수 scope 오류
+
     #지뢰 랜덤생성
     mines=[]
     while len(mines)<mine_num:
@@ -52,18 +75,49 @@ def minesweeper(level):
         if temp not in mines:
             mines.append(temp)
 
+    #버튼 인덱스 구하는 함수
+    def findindex(x,y):
+        print(x,y)
+        return [0,0]
 
-    
+
+    #블럭 이미지 변경 오류(PIL _imaging오류)
+    def sign(event):
+        global click_num
+        if click_num==0:
+            click_num+=1
+            thread=threading.Thread(target=starttimer)
+            thread.start()
+        button_index=findindex(event.x_root,event.y_root)
+        #print(event.x_root,event.y_root)
+        #print("level =",level)
+        #img = Image.open('minesweeper/question.png')
+        #image = img.resize((2, 1), Image.ANTIALIAS)
+        #resized_image = ImageTk.Photoimage(image)
+        #img=ImageTk.PhotoImage(Image.open("minesweeper/question.png"))
+        btn[button_index[0]][button_index[1]]["text"]="1"
     
 
     #지뢰 평상시 : raised, Hover 시 : groove, 선택완료시 : ridge(선택불가능 추가)
 
-    btn=[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove") for i in range(size_y*size_x)]
+    #btn=[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove") for i in range(size_y*size_x)]
+    #btn_index=0
+    #for i in range(size_y):
+    #    for j in range(size_x):
+    #        btn[btn_index].bind("<Button-3>",sign)
+    #        btn[btn_index].grid(row=i,column=j)
+    #        btn_index+=1
+
+
+    btn=[[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove") for i in range(size_x)]for j in range(size_y)]
     btn_index=0
     for i in range(size_y):
         for j in range(size_x):
-            btn[btn_index].grid(row=i,column=j)
-            btn_index+=1
+            btn[i][j].bind("<Button-3>",sign)
+            btn[i][j].grid(row=i,column=j)
+            
+
+
     #def printnum(num):
     #    print(num)
 
@@ -84,20 +138,7 @@ def minesweeper(level):
     #    btn[i].pack()
 
 
-    
-
-
-    second=0
-    def starttimer():
-        second=0
-        while True:
-            timer=tk.Label(top_menu,text=second,width=10,height=5,foreground="red",font=20)
-            timer.pack()
-            second+=1
-            time.sleep(1)
-            timer.destroy()
-    thread=threading.Thread(target=starttimer)
-    thread.start()
+   
 
     minesweeper_window.mainloop()
 
