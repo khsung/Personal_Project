@@ -50,9 +50,9 @@ def minesweeper(level):
     newgamebutton.pack(side="right")
     
 
-    second=0
-    timer=tk.Label(top_menu,text=second,width=10,height=5,foreground="red",font=20)
-    timer.pack()
+    #second=0
+    #timer=tk.Label(top_menu,text=second,width=10,height=5,foreground="red",font=20)
+    #timer.pack()
     def starttimer():
         second=0
         while True:
@@ -61,12 +61,9 @@ def minesweeper(level):
             second+=1
             time.sleep(1)
             timer.destroy()
-    #thread=threading.Thread(target=starttimer)
-    #thread.start()
+    thread=threading.Thread(target=starttimer)
+    thread.start()
 
-
-    ##쓰레드 시작을 위한 첫 클릭 변수
-    #click_num=0            변수 scope 오류
 
     #지뢰 랜덤생성
     mines=[]
@@ -78,16 +75,12 @@ def minesweeper(level):
     #버튼 인덱스 구하는 함수
     def findindex(x,y):
         print(x,y)
+        #x,y는 좌표, 난이도에 따라 좌표로 인덱스를 구분짓고 리턴
         return [0,0]
 
 
     #블럭 이미지 변경 오류(PIL _imaging오류)
     def sign(event):
-        global click_num
-        if click_num==0:
-            click_num+=1
-            thread=threading.Thread(target=starttimer)
-            thread.start()
         button_index=findindex(event.x_root,event.y_root)
         #print(event.x_root,event.y_root)
         #print("level =",level)
@@ -108,11 +101,11 @@ def minesweeper(level):
     #        btn[btn_index].grid(row=i,column=j)
     #        btn_index+=1
 
-
     btn=[[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove") for i in range(size_x)]for j in range(size_y)]
     btn_index=0
     for i in range(size_y):
         for j in range(size_x):
+            #오른쪽 버튼 클릭으로 이벤트 실행
             btn[i][j].bind("<Button-3>",sign)
             btn[i][j].grid(row=i,column=j)
             
