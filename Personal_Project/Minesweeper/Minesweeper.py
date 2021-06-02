@@ -74,21 +74,22 @@ def minesweeper(level):
 
     #버튼 인덱스 구하는 함수
     def findindex(x,y):
-        print(x,y)
+        
         #x,y는 좌표, 난이도에 따라 좌표로 인덱스를 구분짓고 리턴
         return [0,0]
 
 
     #블럭 이미지 변경 오류(PIL _imaging오류)
-    def sign(event):
-        button_index=findindex(event.x_root,event.y_root)
-        #print(event.x_root,event.y_root)
+    #def sign(event):
+        #button_index=findindex(event.x,event.y)
+    def sign(x,y):
+        print(x,y)
         #print("level =",level)
         #img = Image.open('minesweeper/question.png')
         #image = img.resize((2, 1), Image.ANTIALIAS)
         #resized_image = ImageTk.Photoimage(image)
         #img=ImageTk.PhotoImage(Image.open("minesweeper/question.png"))
-        btn[button_index[0]][button_index[1]]["text"]="1"
+        #btn[button_index[0]][button_index[1]]["text"]="1"
     
 
     #지뢰 평상시 : raised, Hover 시 : groove, 선택완료시 : ridge(선택불가능 추가)
@@ -101,15 +102,13 @@ def minesweeper(level):
     #        btn[btn_index].grid(row=i,column=j)
     #        btn_index+=1
 
-    btn=[[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove") for i in range(size_x)]for j in range(size_y)]
+    btn=[[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove", command=(lambda x=i,y=j:sign(x,y))) for i in range(size_x)]for j in range(size_y)]
     btn_index=0
     for i in range(size_y):
         for j in range(size_x):
             #오른쪽 버튼 클릭으로 이벤트 실행
-            btn[i][j].bind("<Button-3>",sign)
             btn[i][j].grid(row=i,column=j)
             
-
 
     #def printnum(num):
     #    print(num)
