@@ -1,4 +1,3 @@
-#from tkinter import *
 from tkinter import ttk
 from tkinter import messagebox
 
@@ -30,8 +29,6 @@ def minesweeper(level):
         mine_num=99
         size_x=30
         size_y=16
-
-
 
 
     #새 게임 시작하기(난이도 선택 화면으로)
@@ -74,22 +71,33 @@ def minesweeper(level):
 
     #버튼 인덱스 구하는 함수
     def findindex(x,y):
-        
         #x,y는 좌표, 난이도에 따라 좌표로 인덱스를 구분짓고 리턴
         return [0,0]
 
+    def count_mine(x,y):
+        cnt=0
+        for i in mines:
+            if abs(i[0]-y)<=1 and abs(i[1]-x)<=1:
+                cnt+=1
+        return cnt
 
     #블럭 이미지 변경 오류(PIL _imaging오류)
-    #def sign(event):
-        #button_index=findindex(event.x,event.y)
-    def sign(x,y):
-        print(x,y)
-        #print("level =",level)
+    def sign(b,x,y):
+        global thread
+        if b==1:
+            if [y,x] in mines:
+                messagebox.showinfo("Gameover","지뢰를 눌렀습니다!")
+                restart()
+            else:
+                adjacent_mines=count_mine(x,y)
+                btn[y][x]['text']=adjacent_mines
+        elif b==3:
+            print("오른쪽버튼",x,y)
+            #btn[y][x]['image']=tk.PhotoImage(file="./Minesweeper/question.png")
         #img = Image.open('minesweeper/question.png')
         #image = img.resize((2, 1), Image.ANTIALIAS)
         #resized_image = ImageTk.Photoimage(image)
         #img=ImageTk.PhotoImage(Image.open("minesweeper/question.png"))
-        #btn[button_index[0]][button_index[1]]["text"]="1"
     
 
     #지뢰 평상시 : raised, Hover 시 : groove, 선택완료시 : ridge(선택불가능 추가)
@@ -102,34 +110,16 @@ def minesweeper(level):
     #        btn[btn_index].grid(row=i,column=j)
     #        btn_index+=1
 
-    btn=[[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove", command=(lambda x=i,y=j:sign(x,y))) for i in range(size_x)]for j in range(size_y)]
+
+    btn=[[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove") for i in range(size_x)]for j in range(size_y)]
     btn_index=0
     for i in range(size_y):
         for j in range(size_x):
-            #오른쪽 버튼 클릭으로 이벤트 실행
+            #lambda 첫번째 인자는 클릭 이벤트가 저장됨(이유는 모르겠음, 두번째 파라미터부터 원하는 변수가 저장됨)
+            btn[i][j].bind("<Button-1>",lambda event,b=1,x=j,y=i:sign(b,x,y))
+            btn[i][j].bind("<Button-3>",lambda event,b=3,x=j,y=i:sign(b,x,y))
             btn[i][j].grid(row=i,column=j)
-            
-
-    #def printnum(num):
-    #    print(num)
-
-    #btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="flat"))
-    #btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="groove",overrelief="flat"))
-
-    #btn.append(tk.Button(minesweeper_window,text="",width=20,height=20,bd=3,relief="raised",overrelief="groove"))
-
-    #btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="ridge"))
-    
-    #btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="solid"))
-
-    #btn.append(tk.Button(minesweeper_window,text="",width=2,height=1,bd=3,relief="sunken"))
-
-
-    #for i in range(len(btn)):
-    #    #btn[i].bind("<ButtonRelease-1>",)
-    #    btn[i].pack()
-
-
+           
    
 
     minesweeper_window.mainloop()
