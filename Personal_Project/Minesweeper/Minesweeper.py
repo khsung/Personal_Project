@@ -74,6 +74,7 @@ def minesweeper(level):
         #x,y는 좌표, 난이도에 따라 좌표로 인덱스를 구분짓고 리턴
         return [0,0]
 
+    #지뢰 갯수 찾기
     def count_mine(x,y):
         cnt=0
         for i in mines:
@@ -81,16 +82,38 @@ def minesweeper(level):
                 cnt+=1
         return cnt
 
+    #공백 버튼 펼치기
+    def spread(x,y):
+        blank_queue=[[x,y]]
+        dir=[[-1,0],[0,1],[1,0],[0,-1]]
+        while len(blank_queue)>0:
+            tempx,tempy=blank_queue.pop(0)
+            for i in dir:
+                if tempy+i[0]>=0 and tempy+i[0]<size_y and tempx+i[1]>=0 and tempx+i[1]<size_x and btn[tempy+i[0]][tempx+i[1]]['text']!="공백":
+                    if count_mine(tempx+i[1],tempy+i[0])>0:
+                        #버튼 비활성화 추가
+                        btn[tempy+i[0]][tempx+i[1]]['text']=count_mine(tempx+i[1],tempy+i[0])
+                    else:
+                        #버튼 비활성화 추가
+                        btn[tempy+i[0]][tempx+i[1]]['text']="공백"
+                        blank_queue.append([tempx+i[1],tempy+i[0]])
+
+
     #블럭 이미지 변경 오류(PIL _imaging오류)
     def sign(b,x,y):
         global thread
         if b==1:
             if [y,x] in mines:
+
                 messagebox.showinfo("Gameover","지뢰를 눌렀습니다!")
                 restart()
             else:
                 adjacent_mines=count_mine(x,y)
-                btn[y][x]['text']=adjacent_mines
+                if adjacent_mines:
+                    btn[y][x]['text']=adjacent_mines
+                else:
+                    btn[y][x]['text']="공백"
+                    spread(x,y)
         elif b==3:
             print("오른쪽버튼",x,y)
             #btn[y][x]['image']=tk.PhotoImage(file="./Minesweeper/question.png")
