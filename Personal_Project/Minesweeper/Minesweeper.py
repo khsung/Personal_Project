@@ -104,7 +104,9 @@ def minesweeper(level):
         global thread
         if b==1:
             if [y,x] in mines:
-
+                #모든 지뢰 출력
+                for i in mines:
+                    btn[i[0]][i[1]]['text']="지뢰"
                 messagebox.showinfo("Gameover","지뢰를 눌렀습니다!")
                 restart()
             else:
