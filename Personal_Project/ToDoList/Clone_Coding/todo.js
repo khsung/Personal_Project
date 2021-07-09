@@ -18,7 +18,6 @@ function deletetodo(event){
 
 function settodos(){
     localStorage.setItem('todos',JSON.stringify(todos))
-
 }
 
 function showTodos(value){
