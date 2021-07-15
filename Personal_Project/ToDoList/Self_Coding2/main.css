@@ -1,0 +1,43 @@
+html{
+    height: 100vh;
+    background-image: linear-gradient(124deg, #e84c6c, #cb8971, #a1b575, #54db79);
+}
+body{
+    text-align: center;
+    
+}
+li{
+    list-style: none;
+    margin: 14px;
+}
+h1{
+    font-size: 100px;
+    color: rgb(247, 227, 202);
+    display: inline-block;
+    transition: 0.5s;
+}
+h1:hover{
+    font-size: 150px;
+    color: rgb(247, 227, 202);
+    display: inline-block;
+    transition: 0.8s;
+    opacity: 1;
+}
+.active{
+    visibility: hidden;
+}
+.toggle_btn{
+    width: 150px;
+    height: 40px;
+    border-radius: 10px;
+    border: none;
+}
+.input_text{
+    width: 450px;
+    height: 40px;
+    font-size: large;
+    padding: 2px 5px;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+}
