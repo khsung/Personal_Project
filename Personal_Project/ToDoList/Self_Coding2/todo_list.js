@@ -45,7 +45,7 @@ function complete(event){
 
     span.innerHTML=text_value
     del_btn.id=complete_id
-    del_btn.innerText="삭제"
+    del_btn.innerText="❌"
     del_btn.addEventListener('click',delete_btn_complete)
     span.appendChild(del_btn)
     li.appendChild(span)
@@ -118,10 +118,10 @@ function show_todo(){
 
         span.innerHTML=todo[i][0]
         complete_btn.id=todo[i][1]
-        complete_btn.innerText="완료"
+        complete_btn.innerText="✔️"
         complete_btn.addEventListener('click',complete)
         del_btn.id=todo[i][1]
-        del_btn.innerText="삭제"
+        del_btn.innerText="❌"
         del_btn.addEventListener('click',delete_btn_todo)
         span.appendChild(complete_btn)
         span.appendChild(del_btn)
@@ -136,7 +136,7 @@ function show_todo(){
 
         span.innerHTML=complete_array[i][0]
         del_btn.id=complete_array[i][1]
-        del_btn.innerText="삭제"
+        del_btn.innerText="❌"
         del_btn.addEventListener('click',delete_btn_complete)
         span.appendChild(del_btn)
         li.appendChild(span)
@@ -180,10 +180,10 @@ function input_todo(event){
 
         span.innerHTML=input_text.value
         complete_btn.id=todo_id
-        complete_btn.innerText="완료"
+        complete_btn.innerText="✔️"
         complete_btn.addEventListener('click',complete)
         del_btn.id=todo_id
-        del_btn.innerText="삭제"
+        del_btn.innerText="❌"
         del_btn.addEventListener('click',delete_btn_todo)
         span.appendChild(complete_btn)
         span.appendChild(del_btn)
