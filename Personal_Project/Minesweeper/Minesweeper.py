@@ -5,6 +5,8 @@ import tkinter as tk
 import threading
 import time
 import random
+import PIL
+from PIL import Image, ImageTk
 
 #게임 화면
 def minesweeper(level):
@@ -52,15 +54,14 @@ def minesweeper(level):
     #timer.pack()
     def starttimer():
         second=0
-        while True:
-            timer=tk.Label(top_menu,text=second,width=10,height=5,foreground="red",font=20)
-            timer.pack()
+        timer=tk.Label(top_menu,text=second,width=10,height=5,foreground="red",font=20)
+        timer.pack()
+        while timer:
             second+=1
             time.sleep(1)
-            timer.destroy()
+            timer['text']=second
     thread=threading.Thread(target=starttimer)
     thread.start()
-
 
     #지뢰 랜덤생성
     mines=[]
@@ -89,35 +90,61 @@ def minesweeper(level):
         while len(blank_queue)>0:
             tempx,tempy=blank_queue.pop(0)
             for i in dir:
-                if tempy+i[0]>=0 and tempy+i[0]<size_y and tempx+i[1]>=0 and tempx+i[1]<size_x and btn[tempy+i[0]][tempx+i[1]]['text']!="공백":
+                if tempy+i[0]>=0 and tempy+i[0]<size_y and tempx+i[1]>=0 and tempx+i[1]<size_x and btn[tempy+i[0]][tempx+i[1]]['text']!=" ":
                     if count_mine(tempx+i[1],tempy+i[0])>0:
-                        #버튼 비활성화 추가
+                        #버튼 비활성화
                         btn[tempy+i[0]][tempx+i[1]]['text']=count_mine(tempx+i[1],tempy+i[0])
+                        btn[tempy+i[0]][tempx+i[1]]['state']=tk.DISABLED
+                        btn[tempy+i[0]][tempx+i[1]]['relief']="groove"
                     else:
-                        #버튼 비활성화 추가
-                        btn[tempy+i[0]][tempx+i[1]]['text']="공백"
+                        #버튼 비활성화
+                        btn[tempy+i[0]][tempx+i[1]]['text']=" "
+                        btn[tempy+i[0]][tempx+i[1]]['state']=tk.DISABLED
                         blank_queue.append([tempx+i[1],tempy+i[0]])
+                        btn[tempy+i[0]][tempx+i[1]]['relief']="groove"
 
 
     #블럭 이미지 변경 오류(PIL _imaging오류)
     def sign(b,x,y):
         global thread
-        if b==1:
+        image = [ImageTk.PhotoImage(Image.open("Minesweeper/flag.png").resize((100,100))),ImageTk.PhotoImage(Image.open("Minesweeper/question.png").resize((15,15)))]
+        #깃발이 아닐때만 클릭 가능
+        if b==1 and btn[y][x]['text']!="깃발":
             if [y,x] in mines:
                 #모든 지뢰 출력
                 for i in mines:
                     btn[i[0]][i[1]]['text']="지뢰"
+                    #btn[i[0]][i[1]]['image']=image[0]
+                    btn[i[0]][i[1]]['relief']="groove"
                 messagebox.showinfo("Gameover","지뢰를 눌렀습니다!")
                 restart()
             else:
                 adjacent_mines=count_mine(x,y)
                 if adjacent_mines:
                     btn[y][x]['text']=adjacent_mines
+                    btn[y][x]['state']=tk.DISABLED
+                    btn[y][x]['relief']="groove"
                 else:
-                    btn[y][x]['text']="공백"
+                    btn[y][x]['text']=""
+                    btn[y][x]['state']=tk.DISABLED
                     spread(x,y)
-        elif b==3:
-            print("오른쪽버튼",x,y)
+        elif b==3 and btn[y][x]['state']!=tk.DISABLED:
+            #print(type(btn[y][x]['image']))
+            #try:
+            if btn[y][x]['text']=="":
+                #btn[y][x]['text']="깃발"
+                btn[y][x]['image']=image[0]
+                
+            elif btn[y][x]['text']=="깃발":
+                btn[y][x]['text']="?"
+            else:
+                btn[y][x]['text']=""
+            #except:
+            #    try:
+            #        if btn[y][x]['image']==image[0]:
+            #            btn[y][x]['text']="?"
+            #    except:
+            #        print("에러")
             #btn[y][x]['image']=tk.PhotoImage(file="./Minesweeper/question.png")
         #img = Image.open('minesweeper/question.png')
         #image = img.resize((2, 1), Image.ANTIALIAS)
@@ -135,8 +162,8 @@ def minesweeper(level):
     #        btn[btn_index].grid(row=i,column=j)
     #        btn_index+=1
 
-
-    btn=[[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove") for i in range(size_x)]for j in range(size_y)]
+    
+    btn=[[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="sunken",disabledforeground="black", text="") for i in range(size_x)]for j in range(size_y)]
     btn_index=0
     for i in range(size_y):
         for j in range(size_x):
