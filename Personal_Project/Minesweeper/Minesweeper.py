@@ -107,7 +107,7 @@ def minesweeper(level):
     #블럭 이미지 변경 오류(PIL _imaging오류)
     def sign(b,x,y):
         global thread
-        image = [ImageTk.PhotoImage(Image.open("Minesweeper/flag.png").resize((100,100))),ImageTk.PhotoImage(Image.open("Minesweeper/question.png").resize((15,15)))]
+        image = [ImageTk.PhotoImage(image=Image.open("Minesweeper/flag.png").resize((20,20))),ImageTk.PhotoImage(image=Image.open("Minesweeper/question.png").resize((20,20)))]
         #깃발이 아닐때만 클릭 가능
         if b==1 and btn[y][x]['text']!="깃발":
             if [y,x] in mines:
@@ -131,7 +131,7 @@ def minesweeper(level):
             #print(type(btn[y][x]['image']))
             #try:
             if btn[y][x]['text']=="":
-                btn[y][x]['text']="깃발"
+                #btn[y][x]['text']="깃발"
                 btn[y][x]['image']=image[0]
                 
             elif btn[y][x]['text']=="깃발":
@@ -150,7 +150,11 @@ def minesweeper(level):
             btn[i][j].bind("<Button-3>",lambda event,b=3,x=j,y=i:sign(b,x,y))
             btn[i][j].grid(row=i,column=j)
            
-   
+    test=tk.Button(game,width=20,height=20,bd=3,relief="raised",overrelief="sunken",disabledforeground="black", text="테스트")
+    test.grid(row=100,column=100)
+    image = [ImageTk.PhotoImage(image=Image.open("Minesweeper/flag.png").resize((20,20))),ImageTk.PhotoImage(image=Image.open("Minesweeper/question.png").resize((15,15)))]
+    #test['image']=image[0]
+    test['image']=image[1]
 
     minesweeper_window.mainloop()
 
