@@ -114,7 +114,6 @@ def minesweeper(level):
                 #모든 지뢰 출력
                 for i in mines:
                     btn[i[0]][i[1]]['text']="지뢰"
-                    #btn[i[0]][i[1]]['image']=image[0]
                     btn[i[0]][i[1]]['relief']="groove"
                 messagebox.showinfo("Gameover","지뢰를 눌렀습니다!")
                 restart()
@@ -132,36 +131,15 @@ def minesweeper(level):
             #print(type(btn[y][x]['image']))
             #try:
             if btn[y][x]['text']=="":
-                #btn[y][x]['text']="깃발"
+                btn[y][x]['text']="깃발"
                 btn[y][x]['image']=image[0]
                 
             elif btn[y][x]['text']=="깃발":
                 btn[y][x]['text']="?"
             else:
                 btn[y][x]['text']=""
-            #except:
-            #    try:
-            #        if btn[y][x]['image']==image[0]:
-            #            btn[y][x]['text']="?"
-            #    except:
-            #        print("에러")
-            #btn[y][x]['image']=tk.PhotoImage(file="./Minesweeper/question.png")
-        #img = Image.open('minesweeper/question.png')
-        #image = img.resize((2, 1), Image.ANTIALIAS)
-        #resized_image = ImageTk.Photoimage(image)
-        #img=ImageTk.PhotoImage(Image.open("minesweeper/question.png"))
-    
 
     #지뢰 평상시 : raised, Hover 시 : groove, 선택완료시 : ridge(선택불가능 추가)
-
-    #btn=[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="groove") for i in range(size_y*size_x)]
-    #btn_index=0
-    #for i in range(size_y):
-    #    for j in range(size_x):
-    #        btn[btn_index].bind("<Button-3>",sign)
-    #        btn[btn_index].grid(row=i,column=j)
-    #        btn_index+=1
-
     
     btn=[[tk.Button(game,width=2,height=1,bd=3,relief="raised",overrelief="sunken",disabledforeground="black", text="") for i in range(size_x)]for j in range(size_y)]
     btn_index=0
